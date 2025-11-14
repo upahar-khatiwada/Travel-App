@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "475925711098",
+    "project_id": "travel-app-lazy",
+    "storage_bucket": "travel-app-lazy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475925711098:android:91432ed70c7d3d30ad6143",
+        "android_client_info": {
+          "package_name": "com.example.travel_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475925711098-kin32ic38n52m3e20ck1udiuh7hg0ni2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.travel_app",
+            "certificate_hash": "4760820c1cc08cf801879379c6c6f60b96219118"
+          }
+        },
+        {
+          "client_id": "475925711098-v65mbp5hecn71r9siamu3iikl3e7n69s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZRkFlSnQWg34TYFzB2xDVdlfQI4hpwgw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475925711098-v65mbp5hecn71r9siamu3iikl3e7n69s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "475925711098-vkgm35gg6tgn6sk9q2ecsvp89d4g8u99.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.travelApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
