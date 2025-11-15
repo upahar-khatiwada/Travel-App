@@ -2,3 +2,8 @@ export 'login_related_screens/login_page.dart';
 export 'home_screen.dart';
 export 'login_related_screens/forgot_password_page.dart';
 export 'login_related_screens/sign_up_page.dart';
+export 'explore_page.dart';
+export 'favorites_page.dart';
+export 'trips_page.dart';
+export 'messages_page.dart';
+export 'profile_page.dart';

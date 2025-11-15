@@ -1,29 +1,43 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'screens.dart';
+import 'package:travel_app/components/components.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentSelectedIndex = 0;
+
+  late final List<Widget> pages;
+
+  @override
+  void initState() {
+    super.initState();
+    pages = const <Widget>[
+      ExplorePage(),
+      FavoritesPage(),
+      TripsPage(),
+      MessagesPage(),
+      ProfilePage(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            await FirebaseAuth.instance.signOut();
-
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute<Widget>(
-                builder: (BuildContext context) => const LoginPage(),
-              ),
-              (Route<dynamic> route) => false,
-            );
-          },
-          child: Text('Sign Out'),
-        ),
+      bottomNavigationBar: MyBottomNavigationBar(
+        currentSelectedIndex: _currentSelectedIndex,
+        onTap: (int index) {
+          setState(() {
+            _currentSelectedIndex = index;
+          });
+        },
       ),
+      body: pages[_currentSelectedIndex],
     );
   }
 }

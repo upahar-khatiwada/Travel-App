@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-  Map<String, String> _assets = {};
+  Map<String, String> _assets = <String, String>{};
   bool _isObscureText = true;
   bool _isLoading = false;
   bool _isLoadingGoogle = false;
@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _assets = assets;
     });
-    print(assets);
   }
 
   @override
