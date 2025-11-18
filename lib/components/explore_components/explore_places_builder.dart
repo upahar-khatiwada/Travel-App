@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_app/screens/screens.dart';
 
 class ExplorePlacesBuilder extends StatefulWidget {
   const ExplorePlacesBuilder({super.key});
@@ -45,7 +46,17 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
                     vertical: 10,
                   ),
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<Widget>(
+                          builder: (_) => ExploreDetailPage(
+                            currentSelectedPlaceData:
+                                snapshot.data!.docs[index],
+                          ),
+                        ),
+                      );
+                    },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -60,21 +71,18 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
                                   images:
                                       (snapshot.data!.docs[index]['imageUrls']
                                               as List<dynamic>)
-                                          .map<Widget>((
-                                            // ignore: always_specify_types
-                                            url,
-                                          ) {
+                                          .map<Widget>((dynamic url) {
                                             return CachedNetworkImage(
                                               imageUrl: url.toString(),
                                               fit: BoxFit.cover,
-                                              // placeholder:
-                                              //     (
-                                              //       BuildContext context,
-                                              //       String url,
-                                              //     ) => const Center(
-                                              //       child:
-                                              //           CircularProgressIndicator(),
-                                              //     ),
+                                              placeholder:
+                                                  (
+                                                    BuildContext context,
+                                                    String url,
+                                                  ) => const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
                                               errorWidget:
                                                   (
                                                     BuildContext context,

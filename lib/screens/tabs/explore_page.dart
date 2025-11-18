@@ -5,6 +5,7 @@ class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
 
   @override
+
   State<ExplorePage> createState() => _ExplorePageState();
 }
 
@@ -40,6 +41,8 @@ class _ExplorePageState extends State<ExplorePage> {
               // for displaying the actual places
             ],
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: const ExploreMapWidget(),
         ),
       ),
     );

@@ -7,3 +7,4 @@ export 'tabs/favorites_page.dart';
 export 'tabs/trips_page.dart';
 export 'tabs/messages_page.dart';
 export 'tabs/profile_page.dart';
+export 'tabs/explore_detail_page.dart';
