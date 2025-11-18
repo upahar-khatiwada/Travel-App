@@ -16,8 +16,8 @@ class ExploreSearchBar extends StatelessWidget {
                 color: Theme.of(context).colorScheme.inversePrimary,
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-                    blurRadius: 5,
-                    color: Theme.of(context).colorScheme.secondary,
+                    blurRadius: 4,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ],
                 borderRadius: BorderRadius.circular(35),

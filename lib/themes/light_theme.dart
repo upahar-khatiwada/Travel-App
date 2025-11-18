@@ -6,6 +6,7 @@ final ThemeData lightTheme = ThemeData(
     primary: Colors.black,
     onPrimary: Colors.white,
     secondary: Color(0xFF717171),
+    tertiary: Color.fromARGB(255, 182, 181, 181),
     onSecondary: Colors.white,
     surface: Colors.white,
     onSurface: Colors.black,
