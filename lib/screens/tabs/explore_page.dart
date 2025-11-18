@@ -6,9 +6,13 @@ class ExplorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: const Scaffold(
-        body: Column(children: <Widget>[ExploreSearchBar()]),
+    return const SafeArea(
+      child: UnFocusOnTap(
+        child: Scaffold(
+          body: Column(
+            children: <Widget>[ExploreSearchBar(), ExploreCategoryBuilder()],
+          ),
+        ),
       ),
     );
   }

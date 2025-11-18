@@ -42,6 +42,7 @@ class ExploreSearchBar extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             'Where to?',
@@ -51,10 +52,23 @@ class ExploreSearchBar extends StatelessWidget {
                               fontSize: 14,
                             ),
                           ),
-                          Text(
-                            'Anywhere . Any week . Add guests',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
+                          SizedBox(
+                            width: 220,
+                            height: 25,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                isCollapsed: true,
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                ),
+                                hintText: 'Anywhere . Any week . Add guests',
+                                hintStyle: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
+                                  fontSize: 12.5,
+                                ),
+                              ),
                             ),
                           ),
                         ],
