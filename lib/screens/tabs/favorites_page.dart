@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/provider/favorite_provider.dart';
 import 'package:travel_app/provider/tabs_selected_provider.dart';
+import 'package:travel_app/components/components.dart';
+import 'package:travel_app/screens/screens.dart';
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});
@@ -17,6 +21,7 @@ class FavoritesPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   'Favorites',
@@ -26,10 +31,12 @@ class FavoritesPage extends StatelessWidget {
                     fontSize: 25,
                   ),
                 ),
+                const SizedBox(height: 20),
                 Expanded(
                   child: favoritePlacesList.isEmpty
                       ? Center(
                           child: Column(
+                            spacing: 8,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
@@ -91,11 +98,133 @@ class FavoritesPage extends StatelessWidget {
                             ],
                           ),
                         )
-                      : ListView.builder(
+                      : GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5,
+                              ),
                           itemCount: favoritePlacesList.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(favoritePlacesList[index]),
+                          itemBuilder: (BuildContext context, int index) {
+                            return FutureBuilder(
+                              future: FirebaseFirestore.instance
+                                  .collection('CollectionOfPlaces')
+                                  .doc(favoritePlacesList[index])
+                                  .get(),
+                              builder:
+                                  (
+                                    BuildContext context,
+                                    AsyncSnapshot<
+                                      DocumentSnapshot<Map<String, dynamic>>
+                                    >
+                                    snapshot,
+                                  ) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                      );
+                                    }
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        final QuerySnapshot<
+                                          Map<String, dynamic>
+                                        >
+                                        querySnapshot = await FirebaseFirestore
+                                            .instance
+                                            .collection('CollectionOfPlaces')
+                                            .where(
+                                              FieldPath.documentId,
+                                              isEqualTo:
+                                                  favoritePlacesList[index],
+                                            )
+                                            .get();
+
+                                        if (querySnapshot.docs.isNotEmpty) {
+                                          final QueryDocumentSnapshot<
+                                            Map<String, dynamic>
+                                          >
+                                          placeDoc = querySnapshot.docs.first;
+
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute<Widget>(
+                                              builder: (_) => ExploreDetailPage(
+                                                currentSelectedPlaceData:
+                                                    placeDoc,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image:
+                                                    CachedNetworkImageProvider(
+                                                      snapshot.data!['image'],
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          Positioned(
+                                            top: 4,
+                                            right: 4,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Provider.of<FavoriteProvider>(
+                                                  context,
+                                                  listen: false,
+                                                ).toggleFavoritePlaces(
+                                                  snapshot.data!,
+                                                );
+                                              },
+                                              child: const RoundIconButton(
+                                                icon: Icons.favorite,
+                                                iconColor: Colors.red,
+                                                iconSize: 30,
+                                              ),
+                                            ),
+                                          ),
+
+                                          Positioned(
+                                            bottom: 8,
+                                            left: 8,
+                                            right: 8,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.black45,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Text(
+                                                textAlign: TextAlign.center,
+                                                snapshot.data!['title'],
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
                             );
                           },
                         ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TabsSelectedProvider extends ChangeNotifier {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   
   int get currentIndex => _currentIndex;
 
