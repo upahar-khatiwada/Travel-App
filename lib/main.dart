@@ -26,7 +26,9 @@ class TravelApp extends StatelessWidget {
         ChangeNotifierProvider<FavoriteProvider>(
           create: (BuildContext context) => FavoriteProvider(),
         ),
-        ChangeNotifierProvider<TabsSelectedProvider>(create: (BuildContext context) => TabsSelectedProvider()),
+        ChangeNotifierProvider<TabsSelectedProvider>(
+          create: (BuildContext context) => TabsSelectedProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Travel App',
