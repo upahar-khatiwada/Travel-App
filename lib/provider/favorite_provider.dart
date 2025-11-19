@@ -1,18 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   List<String> _favoritePlacesIds = <String>[];
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  
+  final String userId = FirebaseAuth.instance.currentUser!.uid;
+
   List<String> get favorites => _favoritePlacesIds;
 
   FavoriteProvider() {
     loadFavoritePlaces();
   }
 
-  void toggleFavoritePlaces(DocumentSnapshot<Map<String, dynamic>> place) async {
+  void toggleFavoritePlaces(
+    DocumentSnapshot<Map<String, dynamic>> place,
+  ) async {
     String placeId = place.id;
 
     if (_favoritePlacesIds.contains(placeId)) {
@@ -31,22 +35,33 @@ class FavoriteProvider extends ChangeNotifier {
   }
 
   Future<void> _addFavoritePlace(String placeId) async {
-    await firebaseFirestore.collection('userFavorites').doc(placeId).set(
-      <String, bool>{'isFavorite': true},
-    );
+    await firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('favorites')
+        .doc(placeId)
+        .set(<String, dynamic>{'isFavorite': true});
   }
 
   Future<void> _removeFavoritePlace(String placeId) async {
-    await firebaseFirestore.collection('userFavorites').doc(placeId).delete();
+    await firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('favorites')
+        .doc(placeId)
+        .delete();
   }
 
   Future<void> loadFavoritePlaces() async {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await firebaseFirestore
-        .collection('userFavorites')
-        .get();
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await firebaseFirestore
+            .collection('users')
+            .doc(userId)
+            .collection('favorites')
+            .get();
 
     _favoritePlacesIds = querySnapshot.docs
-        .map((QueryDocumentSnapshot<Object?> doc) => doc.id)
+        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) => doc.id)
         .toList();
 
     notifyListeners();

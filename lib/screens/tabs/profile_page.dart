@@ -146,12 +146,12 @@ class ProfilePage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute<Widget>(
-                            builder: (_) => const LoginPage(),
-                          ),
-                        );
+                        // Navigator.pushReplacement(
+                        //   context,
+                        //   MaterialPageRoute<Widget>(
+                        //     builder: (_) => const LoginPage(),
+                        //   ),
+                        // );
                       },
                       icon: const Icon(Icons.logout, color: Colors.red),
                       label: const Text(
