@@ -40,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _loadAssets() async {
     final Map<String, String> assets = await AppAssets().fetchAuthAssets();
+    if (!mounted) return;
     setState(() {
       _assets = assets;
     });
@@ -64,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             const SizedBox(height: 20),
-      
+
                             Text(
                               'Sign In to Travel App',
                               style: TextStyle(
@@ -73,13 +74,17 @@ class _LoginPageState extends State<LoginPage> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-      
+
                             SizedBox(
                               height: 180,
-                              child: _assets['login_logo'] != null
+                              child:
+                                  _assets['login_logo'] != null &&
+                                      _assets['login_logo']!.isNotEmpty
                                   ? Center(
                                       child: CachedNetworkImage(
                                         imageUrl: _assets['login_logo'] ?? '',
+                                        errorWidget: (_, __, ___) =>
+                                            const Icon(Icons.error),
                                       ),
                                     )
                                   : Center(
@@ -90,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                             ),
-      
+
                             // EMAIL TEXT
                             TextForm(
                               controller: _emailController,
@@ -100,9 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                               keyboardType: TextInputType.emailAddress,
                               validator: Validators.emailValidator,
                             ),
-      
+
                             const SizedBox(height: 15),
-      
+
                             // PASSWORD TEXT
                             TextForm(
                               controller: _passwordController,
@@ -120,9 +125,9 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               validator: Validators.passwordValidator,
                             ),
-      
+
                             const SizedBox(height: 10),
-      
+
                             Align(
                               alignment: Alignment.centerRight,
                               child: GestureDetector(
@@ -144,9 +149,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-      
+
                             const SizedBox(height: 20),
-      
+
                             SizedBox(
                               width: double.infinity,
                               height: 60,
@@ -162,31 +167,35 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: _isLoading
                                     ? null
                                     : () async {
-                                        if (!_formKey.currentState!.validate()) {
+                                        if (!_formKey.currentState!
+                                            .validate()) {
                                           return;
                                         }
-      
+
                                         setState(() {
                                           _isLoading = true;
                                         });
-      
+
                                         final bool success =
-                                            await FirebaseAuthentication().signIn(
-                                              context,
-                                              _emailController.text.trim(),
-                                              _passwordController.text.trim(),
-                                            );
-      
+                                            await FirebaseAuthentication()
+                                                .signIn(
+                                                  context,
+                                                  _emailController.text.trim(),
+                                                  _passwordController.text
+                                                      .trim(),
+                                                );
+
                                         setState(() {
                                           _isLoading = false;
                                         });
-      
+
                                         if (success) {
                                           if (!context.mounted) return;
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute<Widget>(
-                                              builder: (_) => const HomeScreen(),
+                                              builder: (_) =>
+                                                  const HomeScreen(),
                                             ),
                                           );
                                         } else {
@@ -218,14 +227,17 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                               ),
                             ),
-      
+
                             const SizedBox(height: 10),
-      
+
                             // DIVIDER
                             Row(
                               children: <Widget>[
                                 Expanded(
-                                  child: Container(height: 1, color: Colors.grey),
+                                  child: Container(
+                                    height: 1,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -242,26 +254,30 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(height: 1, color: Colors.grey),
+                                  child: Container(
+                                    height: 1,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),
-      
+
                             const SizedBox(height: 10),
-      
+
                             // CONTINUE WITH GOOGLE
                             GestureDetector(
                               onTap: _isLoadingGoogle
                                   ? null
                                   : () async {
+                                      if (!mounted) return;
                                       setState(() => _isLoadingGoogle = true);
-      
+
                                       final UserCredential? credential =
                                           await FirebaseAuthentication()
                                               .signInWithGoogle(context);
-      
+                                      if (!mounted) return;
                                       setState(() => _isLoadingGoogle = false);
-      
+
                                       if (credential == null) {
                                         if (!context.mounted) return;
                                         ScaffoldMessenger.of(
@@ -289,7 +305,9 @@ class _LoginPageState extends State<LoginPage> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: Theme.of(context).colorScheme.tertiary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.tertiary,
                                     width: 1,
                                   ),
                                 ),
@@ -300,11 +318,15 @@ class _LoginPageState extends State<LoginPage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: <Widget>[
-                                            _assets['google_logo'] != null
+                                            _assets['google_logo'] != null &&
+                                                    _assets['google_logo']!
+                                                        .isNotEmpty
                                                 ? CachedNetworkImage(
                                                     imageUrl:
                                                         _assets['google_logo'] ??
                                                         '',
+                                                    errorWidget: (_, __, ___) =>
+                                                        const Icon(Icons.error),
                                                     height: 24,
                                                     width: 24,
                                                   )
@@ -331,7 +353,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-      
+
                 // SIGN UP
                 GestureDetector(
                   onTap: () {
