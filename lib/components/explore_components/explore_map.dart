@@ -1,16 +1,118 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 
-class ExploreMapWidget extends StatelessWidget {
+class ExploreMapWidget extends StatefulWidget {
   const ExploreMapWidget({super.key});
+
+  @override
+  State<ExploreMapWidget> createState() => _ExploreMapWidgetState();
+}
+
+class _ExploreMapWidgetState extends State<ExploreMapWidget> {
+  final MapController _mapController = MapController();
+
+  Future<void> _openMap() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    final CollectionReference<Map<String, dynamic>> placesCollection =
+        FirebaseFirestore.instance.collection('CollectionOfPlaces');
+
+    if (!mounted) return;
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: placesCollection.snapshots(),
+          builder:
+              (
+                BuildContext context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
+              ) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Icon(Icons.error, size: 80, color: Colors.red),
+                  );
+                }
+
+                final List<Marker> markers = snapshot.data!.docs.map((
+                  QueryDocumentSnapshot<Map<String, dynamic>> doc,
+                ) {
+                  final Map<String, dynamic> data = doc.data();
+                  final double lat = data['latitude'];
+                  final double lng = data['longitude'];
+                  final String title = data['title'];
+
+                  return Marker(
+                    point: LatLng(lat, lng),
+                    child: const Icon(
+                      Icons.location_pin,
+                      size: 35,
+                      color: Colors.red,
+                    ),
+                  );
+                }).toList();
+
+                return FlutterMap(
+                  mapController: _mapController,
+                  options: const MapOptions(
+                    initialCenter: LatLng(0, 0),
+                    initialZoom: 3,
+                    minZoom: 0,
+                    maxZoom: 19,
+                  ),
+                  children: <Widget>[
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      fallbackUrl:
+                          'https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}.png',
+                      // userAgentPackageName: 'com.example.app',
+                    ),
+                    // CurrentLocationLayer(
+                    //   alignPositionOnUpdate: AlignOnUpdate.always,
+                    //   alignDirectionOnUpdate: AlignOnUpdate.never,
+                    //   style: const LocationMarkerStyle(
+                    //     marker: DefaultLocationMarker(
+                    //       child: Icon(
+                    //         Icons.location_pin,
+                    //         color: Colors.black38,
+                    //       ),
+                    //     ),
+                    //     markerSize: Size(30, 30),
+                    //     markerDirection: MarkerDirection.heading,
+                    //   ),
+                    //   // moveAnimationDuration: Duration.zero,
+                    // ),
+                    MarkerLayer(markers: markers),
+                  ],
+                );
+              },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      onPressed: () {
-        // showModalBottomSheet(context: context, builder: builder)
-      },
+      onPressed: _openMap,
       label: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         decoration: BoxDecoration(

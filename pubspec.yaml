@@ -42,6 +42,10 @@ dependencies:
   another_carousel_pro: ^1.0.2
   intl: ^0.20.2
   provider: ^6.1.5+1
+  flutter_map: ^7.0.0
+  latlong2: ^0.9.0
+  flutter_map_location_marker: ^9.1.1
+  geolocator: ^13.0.4
 
 dev_dependencies:
   flutter_test:
