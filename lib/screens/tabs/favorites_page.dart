@@ -130,6 +130,10 @@ class FavoritesPage extends StatelessWidget {
                                     ),
                                   );
                                 }
+
+                                if (!snapshot.hasData ||
+                                    !snapshot.data!.exists) {}
+
                                 return GestureDetector(
                                   onTap: () async {
                                     final QuerySnapshot<Map<String, dynamic>>

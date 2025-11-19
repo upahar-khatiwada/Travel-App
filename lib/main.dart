@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:travel_app/provider/favorite_provider.dart';
 import 'package:travel_app/provider/tabs_selected_provider.dart';
-// import 'package:travel_app/firebase_upload/places_upload.dart';
+import 'package:travel_app/firebase_upload/places_upload.dart';
 import 'package:travel_app/screens/screens.dart';
 import 'package:travel_app/themes/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -58,21 +58,21 @@ class TravelApp extends StatelessWidget {
   }
 }
 
-// // Temporary
-// class UploadToFirebase extends StatelessWidget {
-//   const UploadToFirebase({super.key});
+// Temporary
+class UploadToFirebase extends StatelessWidget {
+  const UploadToFirebase({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: ElevatedButton(
-//           onPressed: () {
-//             savePlacesToFirebase();
-//           },
-//           child: const Text('Upload Places'),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            savePlacesToFirebase();
+          },
+          child: const Text('Upload Places'),
+        ),
+      ),
+    );
+  }
+}
