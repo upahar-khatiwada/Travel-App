@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nested/nested.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/provider/favorite_provider.dart';
 // import 'package:travel_app/firebase_upload/places_upload.dart';
 import 'package:travel_app/screens/screens.dart';
 import 'package:travel_app/themes/theme_provider.dart';
@@ -17,28 +20,35 @@ class TravelApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Travel App',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
-      debugShowCheckedModeBanner: false,
-      // home: const UploadToFirebase(),
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            );
-          } else if (snapshot.hasData) {
-            return const HomeScreen();
-          } else {
-            return const LoginPage();
-          }
-        },
+    return MultiProvider(
+      providers: <SingleChildWidget>[
+        ChangeNotifierProvider<FavoriteProvider>(
+          create: (BuildContext context) => FavoriteProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Travel App',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
+        // home: const UploadToFirebase(),
+        home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              );
+            } else if (snapshot.hasData) {
+              return const HomeScreen();
+            } else {
+              return const LoginPage();
+            }
+          },
+        ),
       ),
     );
   }

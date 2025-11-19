@@ -2,7 +2,10 @@ import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/components/components.dart';
+import 'package:travel_app/provider/favorite_provider.dart';
 
 class ExploreDetailPage extends StatefulWidget {
   final QueryDocumentSnapshot<Map<String, dynamic>> currentSelectedPlaceData;
@@ -18,10 +21,11 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          // padding: const EdgeInsets.only(bottom: 120),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -203,6 +207,45 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
           ),
         ),
       ),
+      // bottomSheet: Row(
+      //   children: <Widget>[
+      //     Column(
+      //       children: <Widget>[
+      //         Text(
+      //           '\$${widget.currentSelectedPlaceData['price']} night',
+      //           style: TextStyle(
+      //             color: Theme.of(context).colorScheme.primary,
+      //             fontWeight: FontWeight.bold,
+      //             fontSize: 18,
+      //           ),
+      //         ),
+      //         Text(
+      //           DateFormat('MMM d').format(
+      //             DateTime.parse(widget.currentSelectedPlaceData['date']),
+      //           ),
+      //           style: TextStyle(
+      //             color: Theme.of(context).colorScheme.primary,
+      //             fontWeight: FontWeight.w400,
+      //             decoration: TextDecoration.underline,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         color: Colors.pinkAccent,
+      //         borderRadius: BorderRadius.circular(12),
+      //       ),
+      //       child: Text(
+      //         'Reserve',
+      //         style: TextStyle(
+      //           color: Theme.of(context).colorScheme.inversePrimary,
+      //           fontWeight: FontWeight.bold,
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -401,11 +444,38 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                     ),
                   ),
 
-                  GestureDetector(
-                    child: const RoundIconButton(
-                      icon: Icons.favorite_border,
-                      iconSize: 24,
-                    ),
+                  Consumer<FavoriteProvider>(
+                    builder:
+                        (
+                          BuildContext context,
+                          FavoriteProvider provider,
+                          Widget? child,
+                        ) {
+                          return GestureDetector(
+                            onTap: () {
+                              provider.toggleFavoritePlaces(
+                                widget.currentSelectedPlaceData,
+                              );
+                            },
+                            child: RoundIconButton(
+                              icon:
+                                  provider.doesFavoritePlaceExist(
+                                    widget.currentSelectedPlaceData,
+                                  )
+                                  ? Icons.favorite_rounded
+                                  : Icons.favorite_border_outlined,
+                              iconColor:
+                                  provider.doesFavoritePlaceExist(
+                                    widget.currentSelectedPlaceData,
+                                  )
+                                  ? Colors.red
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.inversePrimary,
+                              iconSize: 24,
+                            ),
+                          );
+                        },
                   ),
                 ],
               ),

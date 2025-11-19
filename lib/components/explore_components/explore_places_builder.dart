@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_app/provider/favorite_provider.dart';
 import 'package:travel_app/screens/screens.dart';
 
 class ExplorePlacesBuilder extends StatefulWidget {
@@ -19,6 +20,8 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final FavoriteProvider provider = FavoriteProvider.of(context);
+
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
       stream: placesCollection.snapshots(),
       builder:
@@ -152,12 +155,32 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
                             Positioned(
                               top: 5,
                               right: 10,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.favorite_rounded,
-                                  color: Colors.red,
-                                  size: 28,
+                              child: Material(
+                                elevation: 5,
+                                shape: const CircleBorder(),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.inversePrimary,
+                                child: IconButton(
+                                  onPressed: () {
+                                    provider.toggleFavoritePlaces(
+                                      snapshot.data!.docs[index],
+                                    );
+                                  },
+                                  icon: Icon(
+                                    provider.doesFavoritePlaceExist(
+                                          snapshot.data!.docs[index],
+                                        )
+                                        ? Icons.favorite_rounded
+                                        : Icons.favorite_border_outlined,
+                                    color:
+                                        provider.doesFavoritePlaceExist(
+                                          snapshot.data!.docs[index],
+                                        )
+                                        ? Colors.red
+                                        : Theme.of(context).colorScheme.primary,
+                                    size: 28,
+                                  ),
                                 ),
                               ),
                             ),

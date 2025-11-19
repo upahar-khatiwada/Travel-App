@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> savePlacesToFirebase() async {
-  final CollectionReference reference = FirebaseFirestore.instance.collection(
+  final CollectionReference<Map<String, dynamic>> reference = FirebaseFirestore.instance.collection(
     'CollectionOfPlaces',
   );
 
