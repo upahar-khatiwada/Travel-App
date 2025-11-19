@@ -18,58 +18,95 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // this is the top carousel sliding image section
-            topSlidingImageSection(context),
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // this is the top carousel sliding image section
+              topSlidingImageSection(context),
 
-            // this is the details and rating section
-            placeDetailsAlongWithRating(context),
+              // this is the details and rating section
+              widget.currentSelectedPlaceData['isActive']
+                  ? placeDetailsAlongWithRating(context)
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 10,
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.star,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          Text(
+                            '${widget.currentSelectedPlaceData['rating'].toString()} . ',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Container(
+                          GestureDetector(
+                            child: Text(
+                              '${widget.currentSelectedPlaceData['review'].toString()} reviews',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+              Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 15,
                   vertical: 10,
                 ),
-                decoration: BoxDecoration(
-                  border: BoxBorder.all(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      spacing: 12,
-                      children: <Widget>[
-                        const Icon(Icons.diamond, size: 50),
+                    Divider(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      thickness: 1,
+                    ),
+                    InfoRowCard(
+                      leading: const Icon(
+                        Icons.diamond,
+                        size: 50,
+                        color: Colors.purple,
+                      ),
+                      title: 'This is a rare find',
+                      subtitle:
+                          '${widget.currentSelectedPlaceData['vendor'].split(' ')[0]}\'s place is usually fully booked.',
+                    ),
 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'This is a rare find',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                              ),
-                            ),
-                            Text(
-                              '${widget.currentSelectedPlaceData['vendor'].split(' ')[0]}\'s place is usually fully booked.',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
+                    Divider(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      thickness: 1,
+                    ),
+                    InfoRowCard(
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Image.network(
+                          widget.currentSelectedPlaceData['vendorProfile'],
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
                         ),
-                      ],
+                      ),
+                      title:
+                          'Stay with ${widget.currentSelectedPlaceData['vendor'].split(' ')[0]}',
+                      subtitle:
+                          '${widget.currentSelectedPlaceData['vendorProfession']}. 10 years hosting',
                     ),
 
                     Divider(
@@ -77,46 +114,93 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                       thickness: 1,
                     ),
 
-                    Row(
-                      spacing: 12,
-                      children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(32),
-                          child: Image.network(
-                            widget.currentSelectedPlaceData['image'],
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                    InfoRowCard(
+                      leading: Icon(
+                        Icons.room_service,
+                        size: 40,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: 'Room in a rental unit',
+                      subtitle:
+                          'Your own room in a home, and access to shared spaces.',
+                    ),
 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Stay with ${widget.currentSelectedPlaceData['vendor'].split(' ')[0]}',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                              ),
+                    InfoRowCard(
+                      leading: Icon(
+                        Icons.people_outline,
+                        size: 40,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: 'Shared common spaces',
+                      subtitle: "You'll share parts of the home with the host.",
+                    ),
+
+                    Divider(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      thickness: 1,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Column(
+                        spacing: 5,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'About this place',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
-                            Text(
-                              '${widget.currentSelectedPlaceData['vendorProfession']}. 10 years hosting',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 13,
-                              ),
+                          ),
+
+                          Text(
+                            'This place offers a warm and welcoming stay designed for comfort and convenience. Set in a peaceful neighborhood, it provides easy access to nearby attractions, local markets, and transportation. Guests can enjoy well-maintained rooms, thoughtfully curated amenities, and inviting shared spaces. The host is known for exceptional hospitality and attention to detail, ensuring a smooth and pleasant visit. Whether you\'re here for a short getaway or a longer stay, this home provides a perfect balance of relaxation and exploration.',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Divider(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      thickness: 1,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Where you\'ll be',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                            widget.currentSelectedPlaceData['address'],
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

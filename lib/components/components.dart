@@ -7,3 +7,4 @@ export 'explore_components/explore_places_builder.dart';
 export 'explore_components/explore_map.dart';
 export 'round_icon_button.dart';
 export 'star_rating.dart';
+export 'info_row_card.dart';
