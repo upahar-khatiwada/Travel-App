@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:travel_app/provider/favorite_provider.dart';
+import 'package:travel_app/provider/tabs_selected_provider.dart';
 // import 'package:travel_app/firebase_upload/places_upload.dart';
 import 'package:travel_app/screens/screens.dart';
 import 'package:travel_app/themes/theme_provider.dart';
@@ -25,6 +26,7 @@ class TravelApp extends StatelessWidget {
         ChangeNotifierProvider<FavoriteProvider>(
           create: (BuildContext context) => FavoriteProvider(),
         ),
+        ChangeNotifierProvider<TabsSelectedProvider>(create: (BuildContext context) => TabsSelectedProvider()),
       ],
       child: MaterialApp(
         title: 'Travel App',

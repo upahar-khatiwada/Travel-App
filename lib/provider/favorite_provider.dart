@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 class FavoriteProvider extends ChangeNotifier {
   List<String> _favoritePlacesIds = <String>[];
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  
   List<String> get favorites => _favoritePlacesIds;
 
   FavoriteProvider() {

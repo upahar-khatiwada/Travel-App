@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/provider/tabs_selected_provider.dart';
 import 'screens.dart';
 import 'package:travel_app/components/components.dart';
 
@@ -10,8 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentSelectedIndex = 0;
-
   late final List<Widget> pages;
 
   @override
@@ -28,16 +27,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final TabsSelectedProvider provider = TabsSelectedProvider.of(context);
+
     return Scaffold(
       bottomNavigationBar: MyBottomNavigationBar(
-        currentSelectedIndex: _currentSelectedIndex,
+        currentSelectedIndex: provider.currentIndex,
         onTap: (int index) {
-          setState(() {
-            _currentSelectedIndex = index;
-          });
+          provider.setIndex(index);
         },
       ),
-      body: pages[_currentSelectedIndex],
+      body: pages[provider.currentIndex],
     );
   }
 }
