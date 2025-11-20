@@ -52,8 +52,9 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
 
     if (!mounted) return;
 
-    final ValueNotifier<LatLng?> selectedMarkerNotifier =
-        ValueNotifier<LatLng?>(null);
+    final ValueNotifier<QueryDocumentSnapshot<Map<String, dynamic>>?>
+    selectedDocNotifier =
+        ValueNotifier<QueryDocumentSnapshot<Map<String, dynamic>>?>(null);
 
     showModalBottomSheet(
       useSafeArea: true,
@@ -79,21 +80,16 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                     );
                   }
 
-                  final QueryDocumentSnapshot<Map<String, dynamic>> doc =
-                      snapshot.data!.docs[0];
-                  final List<dynamic> imageUrls = doc['imageUrls'];
                   final List<Marker> markers = snapshot.data!.docs.map((
                     QueryDocumentSnapshot<Map<String, dynamic>> doc,
                   ) {
                     final Map<String, dynamic> data = doc.data();
-                    final double lat = data['latitude'];
-                    final double lng = data['longitude'];
 
                     return Marker(
-                      point: LatLng(lat, lng),
+                      point: LatLng(data['latitude'], data['longitude']),
                       child: GestureDetector(
                         onTap: () {
-                          selectedMarkerNotifier.value = LatLng(lat, lng);
+                          selectedDocNotifier.value = doc;
                         },
                         child: const Icon(
                           Icons.location_pin,
@@ -114,7 +110,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                           minZoom: 0,
                           maxZoom: 19,
                           onTap: (TapPosition tapPosition, LatLng latLng) {
-                            selectedMarkerNotifier.value = null;
+                            selectedDocNotifier.value = null;
                           },
                         ),
                         children: <Widget>[
@@ -155,17 +151,20 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                       ),
 
                       // The container that is displayed when tapped on the marker
-                      ValueListenableBuilder<LatLng?>(
-                        valueListenable: selectedMarkerNotifier,
+                      ValueListenableBuilder<QueryDocumentSnapshot<Map<String, dynamic>>?>(
+                        valueListenable: selectedDocNotifier,
                         builder:
                             (
                               BuildContext context,
-                              LatLng? selectedMarker,
+                              QueryDocumentSnapshot<Map<String, dynamic>>? selectedDoc,
                               Widget? child,
                             ) {
-                              if (selectedMarker == null) {
+                              if (selectedDoc == null) {
                                 return const SizedBox.shrink();
                               }
+
+                              final List<dynamic> imageUrls = selectedDoc['imageUrls'];
+
                               return Positioned(
                                 top: 50,
                                 left: 50,
@@ -224,33 +223,35 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                             ),
                                           ),
 
-                                          // doc['isActive']
-                                          //     ?
-                                          Positioned(
-                                            top: 8,
-                                            left: 8,
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 3,
+                                          selectedDoc['isActive']
+                                              ? Positioned(
+                                                  top: 8,
+                                                  left: 8,
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 3,
+                                                        ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            12,
+                                                          ),
+                                                      color: Colors.white,
+                                                    ),
+                                                    child: const Text(
+                                                      'Guest Favorite',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
                                                   ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.white,
-                                              ),
-                                              child: const Text(
-                                                'Guest Favorite',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                                                )
+                                              : const SizedBox.shrink(),
 
-                                          // : const SizedBox.shrink(),
                                           Positioned(
                                             top: 8,
                                             right: 50,
@@ -258,8 +259,8 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                               onTap: () {
                                                 Provider.of<FavoriteProvider>(
                                                   context,
-                                                  listen: false
-                                                ).toggleFavoritePlaces(doc);
+                                                  listen: false,
+                                                ).toggleFavoritePlaces(selectedDoc);
                                               },
                                               child: RoundIconButton(
                                                 icon: Icons.favorite,
@@ -269,7 +270,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                                           FavoriteProvider
                                                         >(context)
                                                         .doesFavoritePlaceExist(
-                                                          doc,
+                                                          selectedDoc,
                                                         )
                                                     ? Colors.red
                                                     : Colors.white,
@@ -282,7 +283,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                             right: 10,
                                             child: GestureDetector(
                                               onTap: () {
-                                                selectedMarkerNotifier.value =
+                                                selectedDocNotifier.value =
                                                     null;
                                               },
                                               child: const RoundIconButton(
@@ -306,7 +307,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Text(
-                                              doc['title'],
+                                              selectedDoc['title'],
                                               style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
@@ -319,7 +320,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                                   color: Colors.black,
                                                 ),
                                                 Text(
-                                                  doc['rating'].toString(),
+                                                  selectedDoc['rating'].toString(),
                                                   style: const TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold,
@@ -336,7 +337,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                           horizontal: 10,
                                           vertical: 2,
                                         ),
-                                        child: Text(doc['date']),
+                                        child: Text(selectedDoc['date']),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -344,7 +345,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                           vertical: 2,
                                         ),
                                         child: Text(
-                                          '\$${doc['price']} night',
+                                          '\$${selectedDoc['price']} night',
                                           style: const TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
@@ -364,7 +365,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
         ),
       ),
     ).whenComplete(() {
-      selectedMarkerNotifier.dispose();
+      selectedDocNotifier.dispose();
     });
   }
 
