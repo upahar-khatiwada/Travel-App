@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -151,23 +152,56 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                       ),
 
                       // The container that is displayed when tapped on the marker
-                      ValueListenableBuilder<QueryDocumentSnapshot<Map<String, dynamic>>?>(
+                      ValueListenableBuilder<
+                        QueryDocumentSnapshot<Map<String, dynamic>>?
+                      >(
                         valueListenable: selectedDocNotifier,
                         builder:
                             (
                               BuildContext context,
-                              QueryDocumentSnapshot<Map<String, dynamic>>? selectedDoc,
+                              QueryDocumentSnapshot<Map<String, dynamic>>?
+                              selectedDoc,
                               Widget? child,
                             ) {
                               if (selectedDoc == null) {
                                 return const SizedBox.shrink();
                               }
 
-                              final List<dynamic> imageUrls = selectedDoc['imageUrls'];
+                              final List<dynamic> imageUrls =
+                                  selectedDoc['imageUrls'];
+
+                              final Point<double> screenPoint = _mapController
+                                  .camera
+                                  .latLngToScreenPoint(
+                                    LatLng(
+                                      selectedDoc['latitude'],
+                                      selectedDoc['longitude'],
+                                    ),
+                                  );
+
+                              final double widgetWidth =
+                                  MediaQuery.of(context).size.width * 0.8;
+                              final double widgetHeight =
+                                  MediaQuery.of(context).size.height * 0.3;
+
+                              final double left =
+                                  screenPoint.x - widgetWidth / 2;
+                              final double top =
+                                  screenPoint.y - widgetHeight * 1.1;
+
+                              final double clampedLeft = left.clamp(
+                                0.0,
+                                MediaQuery.of(context).size.width - widgetWidth,
+                              );
+                              final double clampedTop = top.clamp(
+                                0.0,
+                                MediaQuery.of(context).size.height -
+                                    widgetHeight,
+                              );
 
                               return Positioned(
-                                top: 50,
-                                left: 50,
+                                top: clampedTop,
+                                left: clampedLeft,
                                 child: Container(
                                   width:
                                       MediaQuery.of(context).size.width * 0.8,
@@ -260,7 +294,9 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                                 Provider.of<FavoriteProvider>(
                                                   context,
                                                   listen: false,
-                                                ).toggleFavoritePlaces(selectedDoc);
+                                                ).toggleFavoritePlaces(
+                                                  selectedDoc,
+                                                );
                                               },
                                               child: RoundIconButton(
                                                 icon: Icons.favorite,
@@ -320,7 +356,8 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
                                                   color: Colors.black,
                                                 ),
                                                 Text(
-                                                  selectedDoc['rating'].toString(),
+                                                  selectedDoc['rating']
+                                                      .toString(),
                                                   style: const TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold,
