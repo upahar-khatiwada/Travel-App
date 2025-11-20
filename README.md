@@ -1,7 +1,7 @@
 # Travel App
 
 A modern Flutter-based travel application that helps users explore locations, view documents on a map, and interact with location-based data.  
-This project includes map markers, pop-up information widgets, and intelligent document handling.
+This project includes map markers and pop-up information widgets.
 
 ---
 
@@ -32,8 +32,8 @@ Below are sample screenshots of the app interface:
 
 ### 1) Clone the repository
 ```bash
-git clone https://github.com/upahar-khatiwada/Chess.git
-cd Chess
+git clone https://github.com/upahar-khatiwada/Travel-App.git
+cd Travel-App
 ```
 
 ### 2️) Install Dependencies
