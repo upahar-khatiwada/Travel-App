@@ -2,6 +2,7 @@ import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/components/components.dart';
 import 'package:travel_app/provider/favorite_provider.dart';
@@ -20,10 +21,13 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom + 10,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -195,14 +199,11 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                               fontSize: 15,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.4,
-                              child: Center(
-                                child: LocationInMap(
-                                  place: widget.currentSelectedPlaceData,
-                                ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            child: Center(
+                              child: LocationInMap(
+                                place: widget.currentSelectedPlaceData,
                               ),
                             ),
                           ),
@@ -215,21 +216,67 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        backgroundColor: Colors.pinkAccent,
-        elevation: 5,
-        label: const Text(
-          'Reserve',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+        bottomSheet: Container(
+          height: 70,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            border: const Border(
+              top: BorderSide(color: Colors.black12, width: 1),
+            ),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '\$${widget.currentSelectedPlaceData['price']} per night',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    DateFormat('MMM d').format(
+                      DateTime.parse(widget.currentSelectedPlaceData['date']),
+                    ),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.w400,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 14,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.pinkAccent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Text(
+                  'Reserve',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

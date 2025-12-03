@@ -38,9 +38,11 @@ class _ExploreCategoryBuilderState extends State<ExploreCategoryBuilder> {
             itemCount: categories.length,
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
-                onTap: () => setState(() {
-                  selectedIndex = index;
-                }),
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
                 child: Column(
                   children: <Widget>[
                     Container(
