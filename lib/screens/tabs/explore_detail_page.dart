@@ -24,7 +24,6 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
-          // padding: const EdgeInsets.only(bottom: 120),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -196,6 +195,17 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                               fontSize: 15,
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.4,
+                              child: Center(
+                                child: LocationInMap(
+                                  place: widget.currentSelectedPlaceData,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -206,45 +216,20 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
           ),
         ),
       ),
-      // bottomSheet: Row(
-      //   children: <Widget>[
-      //     Column(
-      //       children: <Widget>[
-      //         Text(
-      //           '\$${widget.currentSelectedPlaceData['price']} night',
-      //           style: TextStyle(
-      //             color: Theme.of(context).colorScheme.primary,
-      //             fontWeight: FontWeight.bold,
-      //             fontSize: 18,
-      //           ),
-      //         ),
-      //         Text(
-      //           DateFormat('MMM d').format(
-      //             DateTime.parse(widget.currentSelectedPlaceData['date']),
-      //           ),
-      //           style: TextStyle(
-      //             color: Theme.of(context).colorScheme.primary,
-      //             fontWeight: FontWeight.w400,
-      //             decoration: TextDecoration.underline,
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //     Container(
-      //       decoration: BoxDecoration(
-      //         color: Colors.pinkAccent,
-      //         borderRadius: BorderRadius.circular(12),
-      //       ),
-      //       child: Text(
-      //         'Reserve',
-      //         style: TextStyle(
-      //           color: Theme.of(context).colorScheme.inversePrimary,
-      //           fontWeight: FontWeight.bold,
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        backgroundColor: Colors.pinkAccent,
+        elevation: 5,
+        label: const Text(
+          'Reserve',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

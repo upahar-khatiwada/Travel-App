@@ -9,3 +9,4 @@ export 'round_icon_button.dart';
 export 'star_rating.dart';
 export 'info_row_card.dart';
 export 'settings_tile.dart';
+export 'explore_components/location_in_map.dart';
