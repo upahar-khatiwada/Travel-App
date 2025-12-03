@@ -222,7 +222,7 @@ class ProfilePage extends StatelessWidget {
 
           Icon(
             Icons.house,
-            size: 90,
+            size: 80,
             color: Theme.of(context).colorScheme.primary,
           ),
         ],

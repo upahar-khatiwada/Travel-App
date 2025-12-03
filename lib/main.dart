@@ -10,12 +10,15 @@ import 'package:travel_app/screens/screens.dart';
 import 'package:travel_app/themes/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Hive.initFlutter();
+  await Hive.openBox('travel_theme');
   runApp(
-    ChangeNotifierProvider(
+    ChangeNotifierProvider<ThemeProvider>(
       create: (_) => ThemeProvider(),
       child: const TravelApp(),
     ),

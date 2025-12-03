@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/themes/themes.dart';
 
 class ThemeProvider with ChangeNotifier {
-  // final Box<dynamic> themeBox = Hive.box('shopping_theme');
+  final Box<dynamic> themeBox = Hive.box('travel_theme');
 
   // default theme is light theme
   ThemeData _themeData = lightTheme;
 
   // constructor to read the saved theme from local device
   ThemeProvider() {
-    // final bool? isDark = themeBox.get('isDarkMode', defaultValue: false);
-    bool isDark = true;
+    final bool? isDark = themeBox.get('isDarkMode', defaultValue: false);
 
     // set the theme mode as per the theme read from the device
     _themeData = isDark! ? darkTheme : lightTheme;
@@ -26,7 +26,7 @@ class ThemeProvider with ChangeNotifier {
   // setter to set the theme data from toggleTheme() method
   set themeData(ThemeData themeData) {
     _themeData = themeData;
-    // themeBox.put('isDarkMode', themeData == darkMode);
+    themeBox.put('isDarkMode', themeData == darkTheme);
     notifyListeners();
   }
 
