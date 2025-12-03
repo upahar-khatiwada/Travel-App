@@ -2,7 +2,6 @@ import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/components/components.dart';
 import 'package:travel_app/provider/favorite_provider.dart';
@@ -469,9 +468,7 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                                     widget.currentSelectedPlaceData,
                                   )
                                   ? Colors.red
-                                  : Theme.of(
-                                      context,
-                                    ).colorScheme.inversePrimary,
+                                  : Colors.white,
                               iconSize: 24,
                             ),
                           );

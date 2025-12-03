@@ -13,7 +13,7 @@ class MyBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentSelectedIndex,
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       elevation: 5,
       iconSize: 32,
       selectedItemColor: Colors.pinkAccent,

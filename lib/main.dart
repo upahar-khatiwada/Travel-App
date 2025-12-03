@@ -5,15 +5,21 @@ import 'package:provider/single_child_widget.dart';
 import 'package:travel_app/provider/favorite_provider.dart';
 import 'package:travel_app/provider/tabs_selected_provider.dart';
 import 'package:travel_app/firebase_upload/places_upload.dart';
+import 'package:travel_app/provider/theme_provider.dart';
 import 'package:travel_app/screens/screens.dart';
-import 'package:travel_app/themes/theme_provider.dart';
+import 'package:travel_app/themes/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const TravelApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const TravelApp(),
+    ),
+  );
 }
 
 class TravelApp extends StatelessWidget {
@@ -24,35 +30,41 @@ class TravelApp extends StatelessWidget {
     return MultiProvider(
       providers: <SingleChildWidget>[
         ChangeNotifierProvider<FavoriteProvider>(
-          create: (BuildContext context) => FavoriteProvider(),
+          create: (_) => FavoriteProvider(),
         ),
         ChangeNotifierProvider<TabsSelectedProvider>(
-          create: (BuildContext context) => TabsSelectedProvider(),
+          create: (_) => TabsSelectedProvider(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Travel App',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeMode.system,
-        debugShowCheckedModeBanner: false,
-        // home: const UploadToFirebase(),
-        home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
+      child: Consumer<ThemeProvider>(
+        builder:
+            (BuildContext context, ThemeProvider themeProvider, Widget? child) {
+              return MaterialApp(
+                title: 'Travel App',
+                theme: lightTheme,
+                darkTheme: darkTheme,
+                themeMode: themeProvider.themeMode,
+                debugShowCheckedModeBanner: false,
+                home: StreamBuilder<User?>(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<User?> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          );
+                        } else if (snapshot.hasData) {
+                          return const HomeScreen();
+                        } else {
+                          return const LoginPage();
+                        }
+                      },
                 ),
               );
-            } else if (snapshot.hasData) {
-              return const HomeScreen();
-            } else {
-              return const LoginPage();
-            }
-          },
-        ),
+            },
       ),
     );
   }

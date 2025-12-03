@@ -106,7 +106,7 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
                                   dotSize: 4,
                                   dotColor: Theme.of(
                                     context,
-                                  ).colorScheme.inversePrimary,
+                                  ).colorScheme.surface,
                                 ),
                               ),
                             ),
@@ -121,7 +121,7 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
                                           decoration: BoxDecoration(
                                             color: Theme.of(
                                               context,
-                                            ).colorScheme.inversePrimary,
+                                            ).colorScheme.surface,
                                             border: Border.all(
                                               color: Theme.of(
                                                 context,
@@ -158,9 +158,7 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
                               child: Material(
                                 elevation: 5,
                                 shape: const CircleBorder(),
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.inversePrimary,
+                                color: Theme.of(context).colorScheme.surface,
                                 child: IconButton(
                                   onPressed: () {
                                     provider.toggleFavoritePlaces(

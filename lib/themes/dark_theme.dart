@@ -9,7 +9,6 @@ final ThemeData darkTheme = ThemeData(
     onSecondary: Colors.black,
     surface: Color(0xFF121212),
     onSurface: Colors.white,
-    inverseSurface: Colors.black
   ),
   scaffoldBackgroundColor: const Color(0xFF000000),
   appBarTheme: const AppBarTheme(

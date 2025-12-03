@@ -11,16 +11,12 @@ class _ExploreCategoryBuilderState extends State<ExploreCategoryBuilder> {
   int selectedIndex = 0;
 
   final List<Map<String, dynamic>> categories = <Map<String, dynamic>>[
-    <String, dynamic>{'icon': Icons.bed, 'label': 'Rooms'},
-    <String, dynamic>{'icon': Icons.room_service, 'label': 'Icons'},
-    <String, dynamic>{'icon': Icons.house, 'label': 'Homes'},
-    <String, dynamic>{'icon': Icons.surfing, 'label': 'Surfing'},
-    <String, dynamic>{'icon': Icons.person, 'label': 'Profile'},
-    <String, dynamic>{'icon': Icons.person, 'label': 'Profile'},
-    <String, dynamic>{'icon': Icons.person, 'label': 'Profile'},
-    <String, dynamic>{'icon': Icons.person, 'label': 'Profile'},
-    <String, dynamic>{'icon': Icons.person, 'label': 'Profile'},
-    <String, dynamic>{'icon': Icons.person, 'label': 'Profile'},
+    <String, dynamic>{'icon': Icons.bed, 'label': 'Room'},
+    <String, dynamic>{'icon': Icons.house, 'label': 'Home'},
+    <String, dynamic>{'icon': Icons.apartment, 'label': 'Apartment'},
+    <String, dynamic>{'icon': Icons.directions_car, 'label': 'Transport'},
+    <String, dynamic>{'icon': Icons.park, 'label': 'Outdoor'},
+    <String, dynamic>{'icon': Icons.restaurant, 'label': 'Food'},
   ];
 
   @override

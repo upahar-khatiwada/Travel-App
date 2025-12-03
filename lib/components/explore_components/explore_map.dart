@@ -417,7 +417,7 @@ class _ExploreMapWidgetState extends State<ExploreMapWidget> {
         decoration: BoxDecoration(
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Theme.of(context).colorScheme.tertiary,
               blurRadius: 5,
             ),
           ],

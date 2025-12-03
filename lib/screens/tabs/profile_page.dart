@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/components/components.dart';
+import 'package:travel_app/provider/theme_provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -52,6 +53,14 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                SettingsTile(
+                  icon: Icons.brightness_6,
+                  title: 'Change Theme',
+                  onTap: () {
+                    ThemeProvider.of(context, listen: false).toggleTheme();
+                  },
+                ),
+                Divider(color: Theme.of(context).colorScheme.tertiary),
                 SettingsTile(
                   icon: Icons.person_outline,
                   title: 'Personal information',
