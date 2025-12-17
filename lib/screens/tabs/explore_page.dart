@@ -9,6 +9,7 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+  String selectedCategory = 'All';
   bool isSwitchOnForDisplayingTotalPrice =
       false; // the total price displaying switch
 
@@ -23,7 +24,13 @@ class _ExplorePageState extends State<ExplorePage> {
               const ExploreSearchBar(),
 
               // for the categories scroller
-              const ExploreCategoryBuilder(),
+              ExploreCategoryBuilder(
+                onCategorySelected: (String category) {
+                  setState(() {
+                    selectedCategory = category;
+                  });
+                },
+              ),
 
               // for the total price display
               Expanded(
@@ -31,7 +38,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: Column(
                     children: <Widget>[
                       displayTotalPriceSwitch(context),
-                      const ExplorePlacesBuilder(),
+                      ExplorePlacesBuilder(categoryFilter: selectedCategory),
                     ],
                   ),
                 ),

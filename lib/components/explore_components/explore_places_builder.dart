@@ -7,7 +7,8 @@ import 'package:travel_app/provider/favorite_provider.dart';
 import 'package:travel_app/screens/screens.dart';
 
 class ExplorePlacesBuilder extends StatefulWidget {
-  const ExplorePlacesBuilder({super.key});
+  final String categoryFilter;
+  const ExplorePlacesBuilder({super.key, required this.categoryFilter});
 
   @override
   State<ExplorePlacesBuilder> createState() => _ExplorePlacesBuilderState();
@@ -23,7 +24,11 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
     final FavoriteProvider provider = FavoriteProvider.of(context);
 
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: placesCollection.snapshots(),
+      stream: widget.categoryFilter == 'All'
+          ? placesCollection.snapshots()
+          : placesCollection
+                .where('category', isEqualTo: widget.categoryFilter)
+                .snapshots(),
       builder:
           (
             BuildContext context,

@@ -48,6 +48,7 @@ class TravelApp extends StatelessWidget {
                 darkTheme: darkTheme,
                 themeMode: themeProvider.themeMode,
                 debugShowCheckedModeBanner: false,
+                // home: const UploadToFirebase(),
                 home: StreamBuilder<User?>(
                   stream: FirebaseAuth.instance.authStateChanges(),
                   builder:

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 Future<void> savePlacesToFirebase() async {
   final CollectionReference<Map<String, dynamic>> reference = FirebaseFirestore
@@ -38,6 +39,7 @@ class Place {
   final double latitude;
   final double longitude;
   final List<String> imageUrls;
+  final String category;
 
   Place({
     required this.title,
@@ -55,6 +57,7 @@ class Place {
     required this.latitude,
     required this.longitude,
     required this.imageUrls,
+    required this.category,
   });
 
   Map<String, dynamic> convertToMap() {
@@ -74,9 +77,19 @@ class Place {
       'latitude': latitude,
       'longitude': longitude,
       'imageUrls': imageUrls,
+      'category': category,
     };
   }
 }
+
+final List<Map<String, dynamic>> categories = <Map<String, dynamic>>[
+  <String, dynamic>{'icon': Icons.bed, 'label': 'Room'},
+  <String, dynamic>{'icon': Icons.house, 'label': 'Home'},
+  <String, dynamic>{'icon': Icons.apartment, 'label': 'Apartment'},
+  <String, dynamic>{'icon': Icons.directions_car, 'label': 'Transport'},
+  <String, dynamic>{'icon': Icons.park, 'label': 'Outdoor'},
+  <String, dynamic>{'icon': Icons.restaurant, 'label': 'Food'},
+];
 
 List<Place> places = <Place>[
   Place(
@@ -94,11 +107,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '2 beds, 2 bathrooms',
     latitude: 34.0259,
     longitude: -118.7798,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/1025/400/300',
       'https://picsum.photos/id/1024/400/300',
       'https://picsum.photos/id/1019/400/300',
     ],
+    category: categories[0 % categories.length]['label']!, // Room
   ),
   Place(
     title: 'Alpine Mountain Lodge',
@@ -115,11 +129,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '3 beds, 1 bathroom',
     latitude: 39.1911,
     longitude: -106.8175,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/104/400/300',
       'https://picsum.photos/id/105/400/300',
       'https://picsum.photos/id/106/400/300',
     ],
+    category: categories[1 % categories.length]['label']!, // Home
   ),
   Place(
     title: 'Urban Boutique Hotel',
@@ -136,11 +151,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '1 bed, 1 bathroom',
     latitude: 41.8837,
     longitude: -87.6289,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/108/400/300',
       'https://picsum.photos/id/109/400/300',
       'https://picsum.photos/id/110/400/300',
     ],
+    category: categories[2 % categories.length]['label']!, // Apartment
   ),
   Place(
     title: 'Tropical Rainforest Eco‑Lodge',
@@ -157,11 +173,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '2 beds, 1 bathroom',
     latitude: 9.7489,
     longitude: -83.7534,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/112/400/300',
       'https://picsum.photos/id/113/400/300',
       'https://picsum.photos/id/114/400/300',
     ],
+    category: categories[3 % categories.length]['label']!, // Transport
   ),
   Place(
     title: 'Historic Castle Stay',
@@ -178,11 +195,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '4 beds, 3 bathrooms',
     latitude: 55.9486,
     longitude: -3.1999,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/116/400/300',
       'https://picsum.photos/id/117/400/300',
       'https://picsum.photos/id/118/400/300',
     ],
+    category: categories[4 % categories.length]['label']!, // Outdoor
   ),
   Place(
     title: 'Desert Oasis Camp',
@@ -199,11 +217,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '1 bed (tent), shared bathroom',
     latitude: 31.1086,
     longitude: -4.0110,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/120/400/300',
       'https://picsum.photos/id/121/400/300',
       'https://picsum.photos/id/122/400/300',
     ],
+    category: categories[5 % categories.length]['label']!, // Food
   ),
   Place(
     title: 'Lakeside Wooden Cabin',
@@ -220,11 +239,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '2 beds, 1 bathroom',
     latitude: 39.0968,
     longitude: -120.0324,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/124/400/300',
       'https://picsum.photos/id/125/400/300',
       'https://picsum.photos/id/126/400/300',
     ],
+    category: categories[0 % categories.length]['label']!, // Room
   ),
   Place(
     title: 'Skyline Rooftop Hotel',
@@ -241,11 +261,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '1 bed, 1 bathroom',
     latitude: 40.7128,
     longitude: -74.0060,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/128/400/300',
       'https://picsum.photos/id/129/400/300',
       'https://picsum.photos/id/130/400/300',
     ],
+    category: categories[1 % categories.length]['label']!, // Home
   ),
   Place(
     title: 'Forest Treehouse Retreat',
@@ -262,11 +283,12 @@ List<Place> places = <Place>[
     bedAndBathroom: '1 bed, 1 bathroom',
     latitude: 44.0582,
     longitude: -121.3153,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/132/400/300',
       'https://picsum.photos/id/133/400/300',
       'https://picsum.photos/id/134/400/300',
     ],
+    category: categories[2 % categories.length]['label']!, // Apartment
   ),
   Place(
     title: 'Modern Minimalist Apartment',
@@ -283,179 +305,11 @@ List<Place> places = <Place>[
     bedAndBathroom: '1 bed, 1 bathroom',
     latitude: 52.5200,
     longitude: 13.4050,
-    imageUrls: [
+    imageUrls: <String>[
       'https://picsum.photos/id/136/400/300',
       'https://picsum.photos/id/137/400/300',
       'https://picsum.photos/id/138/400/300',
     ],
-  ),
-  // 10 more places with similar pattern, using different Picsum IDs and vendors
-  Place(
-    title: 'Cliffside Luxury Villa',
-    isActive: false,
-    image: 'https://picsum.photos/id/139/400/300',
-    rating: 5.0,
-    date: randomDate2025(),
-    price: 600,
-    address: 'Santorini, Greece',
-    vendor: 'Nikos Papadopoulos',
-    vendorProfession: 'Villa Owner',
-    vendorProfile: 'https://randomuser.me/api/portraits/men/83.jpg',
-    review: 220,
-    bedAndBathroom: '3 beds, 2 bathrooms',
-    latitude: 36.3932,
-    longitude: 25.4615,
-    imageUrls: [
-      'https://picsum.photos/id/140/400/300',
-      'https://picsum.photos/id/141/400/300',
-      'https://picsum.photos/id/142/400/300',
-    ],
-  ),
-  Place(
-    title: 'Beachfront Bungalow',
-    isActive: true,
-    image: 'https://picsum.photos/id/143/400/300',
-    rating: 4.6,
-    date: randomDate2025(),
-    price: 280,
-    address: 'Koh Samui, Thailand',
-    vendor: 'Somsak Chai',
-    vendorProfession: 'Resort Host',
-    vendorProfile: 'https://randomuser.me/api/portraits/men/75.jpg',
-    review: 105,
-    bedAndBathroom: '2 beds, 1 bathroom',
-    latitude: 9.5120,
-    longitude: 100.0135,
-    imageUrls: [
-      'https://picsum.photos/id/144/400/300',
-      'https://picsum.photos/id/145/400/300',
-      'https://picsum.photos/id/146/400/300',
-    ],
-  ),
-  Place(
-    title: 'Countryside Cottage',
-    isActive: false,
-    image: 'https://picsum.photos/id/147/400/300',
-    rating: 4.5,
-    date: randomDate2025(),
-    price: 160,
-    address: 'Cotswolds, UK',
-    vendor: 'William Clarke',
-    vendorProfession: 'Cottage Owner',
-    vendorProfile: 'https://randomuser.me/api/portraits/men/38.jpg',
-    review: 90,
-    bedAndBathroom: '2 beds, 1 bathroom',
-    latitude: 51.8910,
-    longitude: -1.6554,
-    imageUrls: [
-      'https://picsum.photos/id/148/400/300',
-      'https://picsum.photos/id/149/400/300',
-      'https://picsum.photos/id/150/400/300',
-    ],
-  ),
-  Place(
-    title: 'Rainforest Treehouse',
-    isActive: true,
-    image: 'https://picsum.photos/id/151/400/300',
-    rating: 4.8,
-    date: randomDate2025(),
-    price: 270,
-    address: 'Amazon, Brazil',
-    vendor: 'Ana Silva',
-    vendorProfession: 'Eco Host',
-    vendorProfile: 'https://randomuser.me/api/portraits/women/60.jpg',
-    review: 130,
-    bedAndBathroom: '1 bed, 1 bathroom',
-    latitude: -3.4653,
-    longitude: -62.2159,
-    imageUrls: [
-      'https://picsum.photos/id/152/400/300',
-      'https://picsum.photos/id/153/400/300',
-      'https://picsum.photos/id/154/400/300',
-    ],
-  ),
-  Place(
-    title: 'Mountain Chalet Retreat',
-    isActive: false,
-    image: 'https://picsum.photos/id/155/400/300',
-    rating: 4.7,
-    date: randomDate2025(),
-    price: 230,
-    address: 'Swiss Alps, Switzerland',
-    vendor: 'Hans Meier',
-    vendorProfession: 'Chalet Host',
-    vendorProfile: 'https://randomuser.me/api/portraits/men/20.jpg',
-    review: 115,
-    bedAndBathroom: '3 beds, 2 bathrooms',
-    latitude: 46.8182,
-    longitude: 8.2275,
-    imageUrls: [
-      'https://picsum.photos/id/156/400/300',
-      'https://picsum.photos/id/157/400/300',
-      'https://picsum.photos/id/158/400/300',
-    ],
-  ),
-  Place(
-    title: 'Luxury Penthouse Suite',
-    isActive: true,
-    image: 'https://picsum.photos/id/159/400/300',
-    rating: 5.0,
-    date: randomDate2025(),
-    price: 700,
-    address: 'Downtown Tokyo, Japan',
-    vendor: 'Akira Yamamoto',
-    vendorProfession: 'Hotel Owner',
-    vendorProfile: 'https://randomuser.me/api/portraits/men/99.jpg',
-    review: 250,
-    bedAndBathroom: '2 beds, 2 bathrooms',
-    latitude: 35.6895,
-    longitude: 139.6917,
-    imageUrls: [
-      'https://picsum.photos/id/160/400/300',
-      'https://picsum.photos/id/161/400/300',
-      'https://picsum.photos/id/162/400/300',
-    ],
-  ),
-  Place(
-    title: 'Cozy Winter Cabin',
-    isActive: false,
-    image: 'https://picsum.photos/id/163/400/300',
-    rating: 4.6,
-    date: randomDate2025(),
-    price: 180,
-    address: 'Rocky Mountains, USA',
-    vendor: 'Jack Turner',
-    vendorProfession: 'Cabin Host',
-    vendorProfile: 'https://randomuser.me/api/portraits/men/12.jpg',
-    review: 85,
-    bedAndBathroom: '2 beds, 1 bathroom',
-    latitude: 39.1130,
-    longitude: -106.5350,
-    imageUrls: [
-      'https://picsum.photos/id/164/400/300',
-      'https://picsum.photos/id/165/400/300',
-      'https://picsum.photos/id/166/400/300',
-    ],
-  ),
-  Place(
-    title: 'Mediterranean Seaview Apartment',
-    isActive: true,
-    image: 'https://picsum.photos/id/167/400/300',
-    rating: 4.7,
-    date: randomDate2025(),
-    price: 240,
-    address: 'Nice, France',
-    vendor: 'Isabelle Martin',
-    vendorProfession: 'Apartment Host',
-    vendorProfile: 'https://randomuser.me/api/portraits/women/77.jpg',
-    review: 120,
-    bedAndBathroom: '2 beds, 1 bathroom',
-    latitude: 43.7102,
-    longitude: 7.2620,
-    imageUrls: [
-      'https://picsum.photos/id/168/400/300',
-      'https://picsum.photos/id/169/400/300',
-      'https://picsum.photos/id/170/400/300',
-    ],
+    category: categories[3 % categories.length]['label']!, // Transport
   ),
 ];
