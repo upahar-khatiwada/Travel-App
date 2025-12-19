@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/components/components.dart';
+import 'package:travel_app/models/message_model.dart';
 import 'package:travel_app/provider/favorite_provider.dart';
+import 'package:travel_app/provider/messages_provider.dart';
+import 'package:travel_app/provider/tabs_selected_provider.dart';
 
 class ExploreDetailPage extends StatefulWidget {
   final QueryDocumentSnapshot<Map<String, dynamic>> currentSelectedPlaceData;
@@ -256,20 +261,63 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 25,
-                  vertical: 14,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.pinkAccent,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'Reserve',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () {
+                  final provider = context.read<MessagesProvider>();
+                  final placeId = widget.currentSelectedPlaceData.id;
+
+                  if (provider.isReserved(placeId)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('You already reserved this place'),
+                      ),
+                    );
+                    return;
+                  }
+
+                  provider.reservePlace(
+                    placeId,
+                    MessageModel(
+                      vendor: widget.currentSelectedPlaceData['vendor'],
+                      image: widget.currentSelectedPlaceData['image'],
+                      vendorProfile:
+                          widget.currentSelectedPlaceData['vendorProfile'],
+                      message:
+                          'Your reservation is confirmed. The host will contact you shortly.',
+                      time: DateTime.now(),
+                    ),
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Reservation confirmed')),
+                  );
+
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    // ignore: use_build_context_synchronously
+                    TabsSelectedProvider.of(context, listen: false).setIndex(3);
+                  });
+                },
+
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 25,
+                    vertical: 14,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        context.read<MessagesProvider>().isReserved(
+                          widget.currentSelectedPlaceData.id,
+                        )
+                        ? const Color.fromARGB(255, 247, 186, 206)
+                        : Colors.pinkAccent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    'Reserve',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

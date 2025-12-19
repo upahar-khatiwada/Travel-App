@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:travel_app/provider/favorite_provider.dart';
+import 'package:travel_app/provider/messages_provider.dart';
 import 'package:travel_app/provider/tabs_selected_provider.dart';
 import 'package:travel_app/firebase_upload/places_upload.dart';
 import 'package:travel_app/provider/theme_provider.dart';
@@ -18,8 +19,13 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('travel_theme');
   runApp(
-    ChangeNotifierProvider<ThemeProvider>(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: <SingleChildWidget>[
+        ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider<MessagesProvider>(
+          create: (_) => MessagesProvider(),
+        ),
+      ],
       child: const TravelApp(),
     ),
   );
