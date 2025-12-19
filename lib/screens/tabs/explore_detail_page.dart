@@ -262,53 +262,70 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                 ],
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   final provider = context.read<MessagesProvider>();
-                  final placeId = widget.currentSelectedPlaceData.id;
+                  final place = widget.currentSelectedPlaceData;
 
                   final message = MessageModel(
-                    placeId: placeId,
-                    vendor: widget.currentSelectedPlaceData['vendor'],
-                    vendorProfile:
-                        widget.currentSelectedPlaceData['vendorProfile'],
-                    image: widget.currentSelectedPlaceData['image'],
+                    placeId: place.id,
+                    vendor: place['vendor'],
+                    vendorProfile: place['vendorProfile'],
+                    image: place['image'],
                     message: 'Your reservation has been confirmed',
                     time: DateTime.now(),
                   );
 
-                  provider.addMessage(message);
+                  try {
+                    await provider.reservePlace(
+                      placeId: place.id,
+                      message: message,
+                    );
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Reservation confirmed')),
-                  );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Reservation confirmed')),
+                    );
 
-                  Future.delayed(const Duration(milliseconds: 300), () {
-                    // ignore: use_build_context_synchronously
-                    TabsSelectedProvider.of(context, listen: false).setIndex(3);
-                  });
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      TabsSelectedProvider.of(
+                        context,
+                        listen: false,
+                      ).setIndex(3);
+                    });
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('You already have an active reservation'),
+                      ),
+                    );
+                  }
                 },
 
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 25,
-                    vertical: 14,
+                child: FutureBuilder(
+                  future: context.read<MessagesProvider>().hasActiveReservation(
+                    widget.currentSelectedPlaceData.id,
                   ),
-                  decoration: BoxDecoration(
-                    color:
-                        // context.read<MessagesProvider>().isReserved(
-                        //   widget.currentSelectedPlaceData.id,
-                        // )
-                        // ? const Color.fromARGB(255, 247, 186, 206)
-                        Colors.pinkAccent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'Reserve',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  builder: (context, snapshot) {
+                    final bool hasActiveReservation = snapshot.data ?? false;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: 14,
+                      ),
+                      decoration: BoxDecoration(
+                        color: hasActiveReservation
+                            ? const Color.fromARGB(255, 247, 186, 206)
+                            : Colors.pinkAccent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        hasActiveReservation ? 'Reserved' : 'Reserve',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

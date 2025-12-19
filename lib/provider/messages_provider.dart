@@ -16,6 +16,62 @@ class MessagesProvider extends ChangeNotifier {
     loadMessages();
   }
 
+  Future<bool> hasActiveReservation(String placeId) async {
+    final DocumentSnapshot<Map<String, dynamic>> doc = await firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('reservations')
+        .doc(placeId)
+        .get();
+
+    if (!doc.exists) return false;
+
+    return doc.data()?['status'] == 'active';
+  }
+
+  Future<void> reservePlace({
+    required String placeId,
+    required MessageModel message,
+  }) async {
+    final DocumentReference<Map<String, dynamic>> reservationRef =
+        firebaseFirestore
+            .collection('users')
+            .doc(userId)
+            .collection('reservations')
+            .doc(placeId);
+
+    final DocumentSnapshot<Map<String, dynamic>> reservationSnapshot =
+        await reservationRef.get();
+
+    if (reservationSnapshot.exists &&
+        reservationSnapshot.data()?['status'] == 'active') {
+      return;
+    }
+
+    await reservationRef.set(<String, dynamic>{
+      'status': 'active',
+      'reservedAt': Timestamp.now(),
+    });
+
+    await firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('messages')
+        .add(message.toMap());
+  }
+
+  Future<void> completeReservation(String placeId) async {
+    await firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('reservations')
+        .doc(placeId)
+        .update(<Object, Object?>{
+          'status': 'completed',
+          'completedAt': Timestamp.now(),
+        });
+  }
+
   void addMessage(MessageModel message) async {
     await firebaseFirestore
         .collection('users')
