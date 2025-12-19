@@ -266,27 +266,17 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                   final provider = context.read<MessagesProvider>();
                   final placeId = widget.currentSelectedPlaceData.id;
 
-                  if (provider.isReserved(placeId)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('You already reserved this place'),
-                      ),
-                    );
-                    return;
-                  }
-
-                  provider.reservePlace(
-                    placeId,
-                    MessageModel(
-                      vendor: widget.currentSelectedPlaceData['vendor'],
-                      image: widget.currentSelectedPlaceData['image'],
-                      vendorProfile:
-                          widget.currentSelectedPlaceData['vendorProfile'],
-                      message:
-                          'Your reservation is confirmed. The host will contact you shortly.',
-                      time: DateTime.now(),
-                    ),
+                  final message = MessageModel(
+                    placeId: placeId,
+                    vendor: widget.currentSelectedPlaceData['vendor'],
+                    vendorProfile:
+                        widget.currentSelectedPlaceData['vendorProfile'],
+                    image: widget.currentSelectedPlaceData['image'],
+                    message: 'Your reservation has been confirmed',
+                    time: DateTime.now(),
                   );
+
+                  provider.addMessage(message);
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Reservation confirmed')),
@@ -305,11 +295,11 @@ class _ExploreDetailPageState extends State<ExploreDetailPage> {
                   ),
                   decoration: BoxDecoration(
                     color:
-                        context.read<MessagesProvider>().isReserved(
-                          widget.currentSelectedPlaceData.id,
-                        )
-                        ? const Color.fromARGB(255, 247, 186, 206)
-                        : Colors.pinkAccent,
+                        // context.read<MessagesProvider>().isReserved(
+                        //   widget.currentSelectedPlaceData.id,
+                        // )
+                        // ? const Color.fromARGB(255, 247, 186, 206)
+                        Colors.pinkAccent,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(

@@ -1,47 +1,73 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/models/message_model.dart';
-import 'package:travel_app/provider/messages_provider.dart';
 
 class MessagesPage extends StatelessWidget {
   const MessagesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final String userId = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Consumer<MessagesProvider>(
-            builder:
-                (
-                  BuildContext context,
-                  MessagesProvider provider,
-                  Widget? child,
-                ) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Text(
-                          'Messages',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                          ),
-                        ),
-                      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(
+                  'Messages',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
+                ),
+              ),
 
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: provider.messages.length,
+              Expanded(
+                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(userId)
+                      .collection('messages')
+                      .orderBy('time', descending: true)
+                      .snapshots(),
+                  builder:
+                      (
+                        BuildContext context,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot,
+                      ) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          return const Center(child: Text('No messages yet'));
+                        }
+
+                        final List<MessageModel> messages = snapshot.data!.docs
+                            .map(
+                              (
+                                QueryDocumentSnapshot<Map<String, dynamic>> doc,
+                              ) => MessageModel.fromMap(doc.data()),
+                            )
+                            .toList();
+
+                        return ListView.builder(
+                          itemCount: messages.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final MessageModel message =
-                                provider.messages[index];
+                            final MessageModel message = messages[index];
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 16),
@@ -121,11 +147,11 @@ class MessagesPage extends StatelessWidget {
                               ),
                             );
                           },
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                        );
+                      },
+                ),
+              ),
+            ],
           ),
         ),
       ),
