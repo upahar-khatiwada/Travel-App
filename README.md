@@ -7,7 +7,9 @@ This project includes map markers and pop-up information widgets.
 
 ## Features
 
-- Interactive map with location markers  
+- Can switch between light theme and dark theme
+- Interactive map with location markers
+- A search bar where you can search for places
 - Popup info cards tied to map coordinates  
 - Document listing and detail views  
 - Clean UI  
@@ -18,13 +20,13 @@ This project includes map markers and pop-up information widgets.
 
 Below are sample screenshots of the app interface:
 
-| Home Screen | Map View | Document Popup |
-|-------------|-----------|----------------|
-| <img width="1080" height="2400" alt="Screenshot_1763644972" src="https://github.com/user-attachments/assets/34dc63a6-a8aa-4c40-a749-7386b162e6a5" /> | <img width="1080" height="2400" alt="Screenshot_1763645001" src="https://github.com/user-attachments/assets/430f0d73-114d-4eb5-be2b-e3571c2e6357" /> | <img width="1080" height="2400" alt="Screenshot_1763645003" src="https://github.com/user-attachments/assets/213c49e3-9cd4-48b5-be18-57b03cf2f99e" /> |
+| Home Screen | Detail Screen_1 | Detail Screen_2 |
+|-------------|----------------|------------------|
+| <img width="1280" height="2856" alt="Screenshot_1766214961" src="https://github.com/user-attachments/assets/04012132-789e-432f-bc5a-6de1c0bbe75b" /> | <img width="1280" height="2856" alt="Screenshot_1766215009" src="https://github.com/user-attachments/assets/386f453d-6358-45e6-91c1-79bd2ff9d5e9" /> | <img width="1280" height="2856" alt="Screenshot_1766215013" src="https://github.com/user-attachments/assets/57177d44-97df-488f-bce7-b76074f8ab64" /> | <img width="1280" height="2856" alt="Screenshot_1766214967" src="https://github.com/user-attachments/assets/f6fdb62e-1979-489f-a41a-395210a23f2b" /> |
 
-| Favorites Screen | Settings | Detail Screen |
-|------------------|----------|---------------|
-| <img width="1080" height="2400" alt="Screenshot_1763644982" src="https://github.com/user-attachments/assets/d7d9019b-8f69-418c-ad03-2da1f6dc2e2b" /> | <img width="1080" height="2400" alt="Screenshot_1763644990" src="https://github.com/user-attachments/assets/5ca5b83c-efe2-45ab-bf42-6fc02938e284" /> | <img width="1080" height="2400" alt="Screenshot_1763645641" src="https://github.com/user-attachments/assets/4773b2b5-81da-4357-a1ca-d28de07e29bc" /> |
+| Favorites Screen | Discover Screen | Messages Screen | Profile Screen |
+|------------------|-----------------|-----------------|----------------|
+| <img width="1280" height="2856" alt="Screenshot_1766214967" src="https://github.com/user-attachments/assets/af3ad417-28fa-4900-8bde-31ced150def5" /> | <img width="1280" height="2856" alt="Screenshot_1766214984" src="https://github.com/user-attachments/assets/2bafbaeb-2294-47b7-9f2d-cd0eb4035f9d" /> | <img width="1280" height="2856" alt="Screenshot_1766214989" src="https://github.com/user-attachments/assets/6f9301b3-01f5-45ec-847c-82f7189704c5" /> | <img width="1280" height="2856" alt="Screenshot_1766214992" src="https://github.com/user-attachments/assets/11d1989d-5e9e-40b7-a6f0-0770b20fff00" /> |
 
 ---
 
