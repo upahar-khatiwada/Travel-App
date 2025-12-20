@@ -4,7 +4,7 @@ export 'login_related_screens/forgot_password_page.dart';
 export 'login_related_screens/sign_up_page.dart';
 export 'tabs/explore_page.dart';
 export 'tabs/favorites_page.dart';
-export 'tabs/trips_page.dart';
+export 'tabs/discover_page.dart';
 export 'tabs/messages_page.dart';
 export 'tabs/profile_page.dart';
 export 'tabs/explore_detail_page.dart';

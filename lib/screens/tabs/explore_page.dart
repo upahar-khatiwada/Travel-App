@@ -47,9 +47,9 @@ class _ExplorePageState extends State<ExplorePage> {
               // for displaying the actual places
             ],
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: const ExploreMapWidget(),
+          // floatingActionButtonLocation:
+          //     FloatingActionButtonLocation.centerDocked,
+          // floatingActionButton: const ExploreMapWidget(),
         ),
       ),
     );
