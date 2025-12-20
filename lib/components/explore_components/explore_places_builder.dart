@@ -19,6 +19,11 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
   final CollectionReference<Map<String, dynamic>> placesCollection =
       FirebaseFirestore.instance.collection('CollectionOfPlaces');
 
+
+@override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final FavoriteProvider provider = FavoriteProvider.of(context);
@@ -233,12 +238,21 @@ class _ExplorePlacesBuilderState extends State<ExplorePlacesBuilder> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  snapshot.data!.docs[index]['address'],
+                                  snapshot.data!.docs[index]['title'],
                                   style: TextStyle(
                                     color: Theme.of(
                                       context,
                                     ).colorScheme.primary,
                                     fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  snapshot.data!.docs[index]['address'],
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 Text(

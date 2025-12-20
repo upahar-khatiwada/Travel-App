@@ -45,11 +45,3 @@ flutter pub get
 ```bash
 flutter run
 ```
-
----
-
-## Build Release APK
-Generate a release build with obfuscation and split debug info:
-```bash
-build/app/outputs/flutter-apk/app-release.apk
-```
